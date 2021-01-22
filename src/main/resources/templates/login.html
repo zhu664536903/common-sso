@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Good Thymes Virtual Grocery</title>
+    <meta charset="UTF-8" />
+    <script src="/js/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <p th:text="${test}">Welcome to our grocery store!</p>
+    <form method="POST" action="/sso/getGrantCode" id="login">
+        <div>
+
+            帐号：<input type="text" name="username"></input>
+        </div>
+        <div>
+
+            密码：<input type="password" name="password"></input>
+        </div>
+    </form>
+    <button id="button">登录</button>
+</body>
+
+</html>
+<script th:inline="javascript">
+    var redirectUri = /*[[${redirectUri}]]*/; //回调地址
+    var appId = /*[[${appId}]]*/;
+    var url = "/sso/getGrantCode"; // 登录地址
+
+    $(function(){
+        $("#button").on("click",function(){
+            let params = $("form").serialize()+"&appId="+appId;
+            $.post(url,params,function(res){
+                if(res.status==true){
+                    window.location.href = redirectUri+"?code="+res.data
+                }else{
+                    alert(res.msg)
+                }
+
+            })
+
+        });
+
+    });
+</script>
